@@ -1,0 +1,13 @@
+# Binaries
+/bin/
+/server
+*.exe
+
+# Env / IDE
+.env
+.idea/
+.vscode/
+*.swp
+
+# OS
+.DS_Store
