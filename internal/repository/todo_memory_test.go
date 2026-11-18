@@ -8,6 +8,7 @@ import (
 	"github.com/FelixDu2025/go-practice/internal/model"
 )
 
+// TestMemoryTodoRepositoryCRUD 覆盖内存仓库 CRUD；stub 阶段会因 ErrNotImplemented 失败。
 func TestMemoryTodoRepositoryCRUD(t *testing.T) {
 	t.Parallel()
 
@@ -20,7 +21,7 @@ func TestMemoryTodoRepositoryCRUD(t *testing.T) {
 
 	created, err := repo.Create(model.Todo{Title: "读 Go 文档", Content: "看 net/http"})
 	if err != nil {
-		t.Fatalf("Create: %v", err)
+		t.Fatalf("Create: %v（请实现 MemoryTodoRepository）", err)
 	}
 	if created.ID != "todo-1" {
 		t.Fatalf("unexpected id: %s", created.ID)

@@ -8,12 +8,13 @@ import (
 	"github.com/FelixDu2025/go-practice/internal/repository"
 )
 
+// TestTodoServiceCreateValidation 校验空 title；service stub 阶段会失败。
 func TestTodoServiceCreateValidation(t *testing.T) {
 	t.Parallel()
 
 	svc := NewTodoService(repository.NewMemoryTodoRepository())
 	if _, err := svc.Create(model.CreateTodoInput{Title: "   "}); !errors.Is(err, ErrInvalidInput) {
-		t.Fatalf("expected ErrInvalidInput, got %v", err)
+		t.Fatalf("expected ErrInvalidInput, got %v（请实现 TodoService.Create 校验）", err)
 	}
 }
 

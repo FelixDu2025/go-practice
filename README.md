@@ -1,14 +1,20 @@
-# go-practice
+# go-practice（练习仓库）
 
-面向初学者的 Go 后端分层练习项目（`github.com/FelixDu2025/go-practice`）。
+这是面向初学者的 **Go 后端分层练习壳**（`github.com/FelixDu2025/go-practice`），**不是**已经写完的样例项目。
 
-使用标准库 `net/http`（Go 1.22+ ServeMux），零第三方依赖，结构清晰，方便练习：
+仓库保留了目录、模型、接口、路由骨架和测试；`handler` / `service` / `repository` / `middleware` 的业务实现已抽成 stub。请你自己完成代码。
+
+**请先打开 [`EXERCISES.md`](./EXERCISES.md)，按步骤练习。**
+
+## 你会练到什么
 
 - 分层：`handler → service → repository`
-- 健康检查
-- Todo / 笔记的内存 CRUD
+- `GET /health`
+- 内存 Todo CRUD（标准库 `net/http`，Go 1.22+ ServeMux）
 - 请求日志中间件
-- 优雅关闭（SIGINT / SIGTERM）
+- 配置、优雅关闭与基础测试
+
+零第三方依赖。
 
 ## 目录结构
 
@@ -16,11 +22,12 @@
 cmd/server/                 # 程序入口：组装依赖、启动 HTTP、优雅关闭
 internal/
   config/                   # 从环境变量读取配置
-  handler/                  # HTTP 适配层（路由与 JSON）
-  service/                  # 业务规则
-  repository/               # 数据访问（当前为内存实现）
-  middleware/               # 请求日志等中间件
-  model/                    # 领域模型与请求 DTO
+  handler/                  # HTTP 适配层（路由与 JSON）——待你实现
+  service/                  # 业务规则——待你实现
+  repository/               # 数据访问（内存）——待你实现
+  middleware/               # 请求日志等——待你实现
+  model/                    # 领域模型与请求 DTO（已给出）
+EXERCISES.md                # 有序练习步骤（从这里开始）
 .env.example                # 环境变量示例
 Makefile                    # run / test / tidy
 Dockerfile                  # 可选容器构建
@@ -33,22 +40,20 @@ Dockerfile                  # 可选容器构建
 ## 快速开始
 
 ```bash
-# 可选：复制环境变量
 cp .env.example .env
-# 本项目直接读进程环境变量；如需加载 .env，可自行 export 或使用 direnv 等工具
 export ADDR=:8080
 
+# 当前可编译启动，但业务接口会返回未实现错误，直到你补全代码
 make run
-# 或：go run ./cmd/server
 ```
 
-健康检查：
+实现完成后可自测：
 
 ```bash
 curl http://localhost:8080/health
 ```
 
-## API 一览
+## 目标 API（需自行实现）
 
 | 方法 | 路径 | 说明 |
 |------|------|------|
@@ -59,44 +64,28 @@ curl http://localhost:8080/health
 | PUT | `/api/todos/{id}` | 更新（部分字段） |
 | DELETE | `/api/todos/{id}` | 删除 |
 
-### 创建示例
-
-```bash
-curl -s -X POST http://localhost:8080/api/todos \
-  -H 'Content-Type: application/json' \
-  -d '{"title":"学习 Go 分层","content":"先跑通内存 CRUD"}'
-```
-
-### 更新示例
-
-```bash
-curl -s -X PUT http://localhost:8080/api/todos/<id> \
-  -H 'Content-Type: application/json' \
-  -d '{"done":true}'
-```
-
 ## Makefile
 
 ```bash
 make run    # 启动服务
-make test   # 跑单元测试
+make test   # 跑测试（实现前会失败，属预期）
 make tidy   # go mod tidy
 ```
 
+说明：
+
+- `go build ./...`：练习壳应能通过
+- `go test ./...`：在补全实现前失败是正常的
+
 ## 可选：Docker
+
+实现并确保 `go build ./cmd/server` 通过后：
 
 ```bash
 docker build -t go-practice .
 docker run --rm -p 8080:8080 go-practice
 ```
 
-## 学习建议
-
-1. 先读 `cmd/server/main.go`，看依赖如何组装。
-2. 从 `handler` 跟到 `service`、`repository`，理解每一层职责。
-3. 尝试把内存仓库换成 SQLite / PostgreSQL（只改 `repository` 实现）。
-4. 扩展字段校验、分页、或换成 `chi` 路由库做对比练习。
-
 ## English (brief)
 
-Beginner-friendly layered Go HTTP API with in-memory todo CRUD, request logging, and graceful shutdown. Zero third-party deps (stdlib `net/http`). Run with `make run`, test with `make test`.
+Exercise shell for a layered Go HTTP API. Stubs compile; tests fail until you implement health, in-memory todo CRUD, and request logging. Start with `EXERCISES.md`.

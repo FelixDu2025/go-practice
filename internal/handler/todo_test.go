@@ -11,6 +11,7 @@ import (
 	"github.com/FelixDu2025/go-practice/internal/service"
 )
 
+// TestTodoHandlerCRUDFlow 在 handler/service/repository 未实现前会失败；补全后应通过。
 func TestTodoHandlerCRUDFlow(t *testing.T) {
 	t.Parallel()
 
@@ -65,6 +66,7 @@ func TestTodoHandlerCRUDFlow(t *testing.T) {
 	}
 }
 
+// TestHealth 在 Health 未实现前会失败（当前 stub 返回 501）。
 func TestHealth(t *testing.T) {
 	t.Parallel()
 
@@ -73,6 +75,6 @@ func TestHealth(t *testing.T) {
 	rec := httptest.NewRecorder()
 	router.ServeHTTP(rec, req)
 	if rec.Code != http.StatusOK {
-		t.Fatalf("health status = %d", rec.Code)
+		t.Fatalf("health status = %d（请先实现 Health）", rec.Code)
 	}
 }
